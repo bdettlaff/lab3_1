@@ -15,6 +15,7 @@ import static org.mockito.Mockito.*;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.Matchers.equalTo;
 
 public class BookKeeperTest {
 
@@ -72,5 +73,15 @@ public class BookKeeperTest {
         Invoice invoice = bookKeeper.issuance(invoiceRequest,taxPolicy);
 
         assertThat(invoice.getItems().size(), is(3));
+    }
+
+    @Test
+    public void shouldReturnTrueIfDataOfClientProperlyPassedToInvoice(){
+        invoiceRequest.add(requestItem);
+
+        Mockito.when(taxPolicy.calculateTax(any(),any())).thenReturn(tax);
+        Invoice invoice = bookKeeper.issuance(invoiceRequest,taxPolicy);
+
+        assertThat(invoice.getClient().getName(),is(equalTo(clientData.getName())));
     }
 }
