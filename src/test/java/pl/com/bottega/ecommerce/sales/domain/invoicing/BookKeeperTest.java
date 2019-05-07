@@ -61,4 +61,16 @@ public class BookKeeperTest {
         verify(taxPolicy,times(2)).calculateTax(ProductType.FOOD,money);
 
     }
+
+    @Test
+    public void shouldReturnTrueIfInvoiceRequestReturnsThreePositionsWhenRequestsForThreePositions(){
+        invoiceRequest.add(requestItem);
+        invoiceRequest.add(requestItem);
+        invoiceRequest.add(requestItem);
+
+        Mockito.when(taxPolicy.calculateTax(any(),any())).thenReturn(tax);
+        Invoice invoice = bookKeeper.issuance(invoiceRequest,taxPolicy);
+
+        assertThat(invoice.getItems().size(), is(3));
+    }
 }
