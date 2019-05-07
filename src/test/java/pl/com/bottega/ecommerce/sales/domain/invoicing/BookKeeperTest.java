@@ -1,6 +1,5 @@
 package pl.com.bottega.ecommerce.sales.domain.invoicing;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -12,6 +11,7 @@ import pl.com.bottega.ecommerce.sharedkernel.Money;
 
 import java.util.Date;
 
+import static org.mockito.Mockito.*;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.hamcrest.core.Is.is;
@@ -48,5 +48,17 @@ public class BookKeeperTest {
         Invoice invoice = bookKeeper.issuance(invoiceRequest,taxPolicy);
 
         assertThat(invoice.getItems().size(), is(1));
+    }
+
+    @Test
+    public void shouldReturnTrueIfInvoiceRequestWithTwoPositionShouldInvokesCalculateTaxMethodTwice(){
+        invoiceRequest.add(requestItem);
+        invoiceRequest.add(requestItem);
+
+        Mockito.when(taxPolicy.calculateTax(any(),any())).thenReturn(tax);
+        bookKeeper.issuance(invoiceRequest,taxPolicy);
+
+        verify(taxPolicy,times(2)).calculateTax(ProductType.FOOD,money);
+
     }
 }
