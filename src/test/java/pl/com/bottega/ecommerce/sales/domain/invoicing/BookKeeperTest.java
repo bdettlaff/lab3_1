@@ -84,4 +84,16 @@ public class BookKeeperTest {
 
         assertThat(invoice.getClient().getName(),is(equalTo(clientData.getName())));
     }
+
+    @Test
+    public void shouldReturnTrueIfCreateMethodInInvoiceFactoryInvokesOnce(){
+        InvoiceFactory invoiceFactory = mock(InvoiceFactory.class);
+        bookKeeper = new BookKeeper(invoiceFactory);
+
+        Mockito.when(taxPolicy.calculateTax(any(),any())).thenReturn(tax);
+        bookKeeper.issuance(invoiceRequest,taxPolicy);
+
+        verify(invoiceFactory).create(any());
+
+    }
 }
