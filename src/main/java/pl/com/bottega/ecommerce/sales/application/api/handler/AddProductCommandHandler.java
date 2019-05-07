@@ -30,6 +30,14 @@ import pl.com.bottega.ecommerce.system.application.SystemContext;
 
 public class AddProductCommandHandler implements CommandHandler<AddProductCommand, Void>{
 
+	public AddProductCommandHandler(ReservationRepository reservationRepository, ProductRepository productRepository,
+			SuggestionService suggestionService, ClientRepository clientRepository, SystemContext systemContext) {
+		this.reservationRepository = reservationRepository;
+		this.productRepository = productRepository;
+		this.suggestionService = suggestionService;
+		this.clientRepository = clientRepository;
+		this.systemContext = systemContext;
+	}
 
 	private ReservationRepository reservationRepository;
 	
