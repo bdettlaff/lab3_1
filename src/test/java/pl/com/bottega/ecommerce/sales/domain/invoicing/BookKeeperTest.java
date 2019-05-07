@@ -1,6 +1,8 @@
 package pl.com.bottega.ecommerce.sales.domain.invoicing;
 
+import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Test;
 import org.mockito.Mockito;
 import pl.com.bottega.ecommerce.canonicalmodel.publishedlanguage.ClientData;
 import pl.com.bottega.ecommerce.canonicalmodel.publishedlanguage.Id;
@@ -9,6 +11,10 @@ import pl.com.bottega.ecommerce.sales.domain.productscatalog.ProductType;
 import pl.com.bottega.ecommerce.sharedkernel.Money;
 
 import java.util.Date;
+
+import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
+import static org.hamcrest.core.Is.is;
 
 public class BookKeeperTest {
 
@@ -34,4 +40,13 @@ public class BookKeeperTest {
         tax = new Tax(money, "taxStub");
     }
 
+    @Test
+    public void shouldReturnTrueIfInvoiceRequestReturnsOnePositionWhenRequestsForOnePosition(){
+        invoiceRequest.add(requestItem);
+
+        Mockito.when(taxPolicy.calculateTax(any(),any())).thenReturn(tax);
+        Invoice invoice = bookKeeper.issuance(invoiceRequest,taxPolicy);
+
+        assertThat(invoice.getItems().size(), is(1));
+    }
 }
